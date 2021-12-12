@@ -41,6 +41,14 @@ const SignInScreen = (props) => {
 
   return (
     <View style={styles.screen}>
+      <Text style={{
+        fontWeight:"bold",
+        fontSize: 35,
+        color: "#0f4d92",
+        paddingBottom: 5,
+        }}>
+        Course Companion
+      </Text>
       <Image source={yaleLogo} style={{ 
         width: 310, 
         height: 330, 
