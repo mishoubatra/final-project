@@ -12,12 +12,16 @@ import SubmitFeedback from "./Pages/SubmitFeedback";
 import PersonPage from "./Pages/PersonPage";
 import AddClassPage from "./Pages/AddClassPage";
 
+// HANDLES NAVIGTION IN A STACK-LIKE FORMAT
 const Stack = createNativeStackNavigator();
 
+// The main app
 export default function App() {
   return (
+    // Navigation Container
     <NavigationContainer>
       <Stack.Navigator>
+        {/* Each screen should be added to the stack so that you can navigate in and out of it */}
         <Stack.Screen
           name="SignIn"
           options={{

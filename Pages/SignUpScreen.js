@@ -11,35 +11,42 @@ const initialForm = {
 };
 
 const SignUpScreen = (props) => {
+  // The form saved in a state object so that it can save the values in the inputs and be accessed
   const [form, setForm] = useState(initialForm);
-  const [className, setClassName] = useState("");
 
+  // Function handling sign up (Asynchronous Function)
   const onSignUp = async () => {
+    // Checks if the password and confirm password match and the password length is 5 or more
     if (form.password == form.confirmPassword && form.password.length > 4) {
+      // Try-catch, if an error the goes to catch block
       try {
+        // The email is the uniqe id of the user, remove the period because the url will not work
         const uniqIdEmal = form.email.replace(".", "");
+        // Creates the user in the database (users/...@gmailcom)
         const response = await Axios.patch(
           `https://final-project-2f61a-default-rtdb.firebaseio.com/users/${uniqIdEmal}.json`,
           {
+            // Creates a copy of the form object
             ...form,
+            // We dont want to save confirm password in the database that is stupid
             confirmPassword: "",
           }
         );
-
+        // Sets the form to empty
         setForm(initialForm);
+        // Navigates to the Add Class page
         props.navigation.navigate("AddClass", {
           ...form,
+          // Password and Confirm Password is not passed to the next page
           password: "",
           confirmPassword: "",
         });
-
-        // saveCredentialsToStorage(
-
-        // );
       } catch (e) {
+        // You do not want to end up here
         console.log(e);
       }
     } else {
+      // As the console.log() suggests
       console.log("Passwords don't match");
     }
   };

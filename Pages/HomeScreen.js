@@ -11,19 +11,28 @@ import BtrButton from "../Components/BtrButton";
 import Axios from "axios";
 
 const HomeScreen = (props) => {
+  // The passed parameters from the previous screen
   const { email, name, classes: myClasses } = props.route.params;
+  // Search saved in state
   const [search, setSearch] = useState("");
+  // People savec in an array state
   const [people, setPeople] = useState([]);
 
+  // Handles signing out
   const onSignOut = () => {
+    // Navigate to sign in screen
     props.navigation.navigate("SignIn");
   };
 
+  // When you click a person
   const onPerson = (email) => {
+    // Find the person in the list of people
     const person = people.find((person) => person.email == email);
+    // Navigate to PersonView to show details about that person and their schedule
     props.navigation.navigate("PersonView", { ...person });
   };
 
+  // Each person is a button
   const renderPerson = ({ item }) => (
     <TouchableOpacity onPress={() => onPerson(item.email)}>
       <View style={styles.person}>
@@ -33,21 +42,18 @@ const HomeScreen = (props) => {
     </TouchableOpacity>
   );
 
-  // const getPeopleFromDB =
   // ONLY RUNS ONCE IN THIS COMPONENT (When it is born)
   useEffect(async () => {
+    // Get all users from the database
     const response = await Axios.get(
       `https://final-project-2f61a-default-rtdb.firebaseio.com/users.json`
     );
     const { data } = response;
+    // Update the people to the list of people gotten in the database
     const listOfPpl = Object.values(data);
     setPeople(listOfPpl);
   }, []);
-  // const getPeople = () => {
-  //   console.log("RUNS ONCE");
-  // };
 
-  // getPeople();
   const emailToId = (email) => {
     return email.replace(".", "").trim();
   };

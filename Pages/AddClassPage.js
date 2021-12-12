@@ -4,12 +4,14 @@ import Axios from "axios";
 import BtrButton from "../Components/BtrButton";
 
 const AddClassPage = (props) => {
+  // The structure of a single class
   const initialClass = {
     name: "",
     days: [],
     color: "black",
   };
 
+  // The structure of days and time
   const initialDays = {
     M: { yes: false, time: "" },
     T: { yes: false, time: "" },
@@ -17,45 +19,70 @@ const AddClassPage = (props) => {
     Th: { yes: false, time: "" },
     F: { yes: false, time: "" },
   };
+  // Gets the parameters that were sent from the Previous page (SignUpPage) everything but the password and confirm password
   const { params } = props.route;
+  // The list of classes
   const [myClasses, setMyClasses] = useState([]);
+  // The current class that will be added to [myClasses]
   const [myClass, setMyClass] = useState(initialClass);
+  // Handles what day and time the [myClass] will be
   const [days, setDays] = useState(initialDays);
 
+  // When the add class button is clicked execute
   const onAddClass = () => {
+    // Makes a copy of [myClass]
     const copyClass = { ...myClass };
+    // Makes a uniqe id for it
     copyClass.id = Math.random().toString();
+    // Adds the days object to the myClass so that it is linked to it
     copyClass.days = days;
 
+    // Clear the days form
     setDays(initialDays);
+    // Clear the myClass form
     setMyClass(initialClass);
+    // Add the new class to the myClasses list
     setMyClasses(myClasses.concat(copyClass));
-    console.log(myClasses);
   };
 
+  // When finished you click done and this executes
   const onDone = async () => {
+    // Removes period from the email
     const uniqIdEmal = params.email.replace(".", "");
-    console.log(uniqIdEmal);
+
+    // Finds the user using the uniqIdEmail and then adds the classes that you just added
     const response = Axios.patch(
       `https://final-project-2f61a-default-rtdb.firebaseio.com/users/${uniqIdEmal}.json`,
       { classes: myClasses }
     );
-    // * Forward all the form data from sign up to Home [params]
+
+    // Clear the my Classes list
+    setMyClasses([]);
+    // * Forward all the form data from sign up screen to Home screen [params]
     props.navigation.navigate("Home", { ...params });
   };
 
+  // When a day buttons is pressed execute this
   const onDay = (day) => {
+    // Make a copy of days
     const copyDays = { ...days };
+    // Toggle the day (enabled/disabled)
     copyDays[day].yes = !copyDays[day].yes;
+    // Update the days state object
     setDays(copyDays);
   };
 
+  // When time is being written in the input execute this
   const onTime = (day, time) => {
+    // Copy days
     const copyDays = { ...days };
+    // Set the time to the current value of the input
     copyDays[day].time = time;
+    // Update the days state object
     setDays(copyDays);
   };
 
+  // Creates the buttons for M,T,W,Th,F
   const renderDaysOfTheWeek = () => {
     const buttons = [];
     for (let day of Object.keys(initialDays)) {

@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 
 const PersonPage = (props) => {
+  // Parameters from the previous screen
   const { email, classes, name } = props.route.params;
 
+  // Displays the Days of the week and time each class has
   const renderDays = (myClass) => {
     const days = [];
 
@@ -20,6 +22,7 @@ const PersonPage = (props) => {
     return days.map((day) => day);
   };
 
+  // Renders each class of the user
   const MyClass = ({ item }) => (
     <View style={styles.myClass} key={item.id}>
       <Text style={styles.myClassName}>{item.name}</Text>
